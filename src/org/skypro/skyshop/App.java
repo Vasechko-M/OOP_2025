@@ -1,6 +1,7 @@
 package org.skypro.skyshop;
 
-import java.util.SortedMap;
+import org.skypro.skyshop.product.Product;
+import org.skypro.skyshop.product.ProductBasket;
 
 public class App {
     public static void main(String[] args) {
