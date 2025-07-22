@@ -1,7 +1,5 @@
 package org.skypro.skyshop;
 
-import java.util.Objects;
-
 public class Product {
     private String name;
     private int price;

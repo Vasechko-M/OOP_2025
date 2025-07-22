@@ -32,6 +32,5 @@ public class App {
         System.out.println("=====Поиск продукта в пустой корзине=====");
         product = "Масло";
         System.out.println(basket.findProduct(product));
-
     }
 }

@@ -48,5 +48,4 @@ public class ProductBasket {
             products[i] = null;
         }
     }
-
 }
