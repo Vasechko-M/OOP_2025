@@ -29,7 +29,7 @@ public class ProductBasket {
             if (products[i] != null) {
                 System.out.println(products[i].getName() + " - " + products[i].getPrice() + " руб.");
             } else {
-                System.out.println("В корзине пусто");
+                System.out.println("Пустая ячейка");
             }
         }
         System.out.println("Итого: " + getTotalPrice());
