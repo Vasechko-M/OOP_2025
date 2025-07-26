@@ -27,12 +27,19 @@ public class ProductBasket {
     public void printProducts() {
         for (int i = 0; i < products.length; i++) {
             if (products[i] != null) {
-                System.out.println(products[i].getName() + " - " + products[i].getPrice() + " руб.");
-            } else {
-                System.out.println("Пустая ячейка");
+                System.out.println(products[i].toString());
+                } else {
+                    System.out.println("Пустая ячейка");
+                }
+        }
+        int count = 0;
+        for (Product p : products) {
+            if (p != null && p.isSpecial()){
+            count++;
             }
         }
         System.out.println("Итого: " + getTotalPrice());
+        System.out.println("Специальных продуктов " + count);
     }
 
     public boolean findProduct(String name) {
