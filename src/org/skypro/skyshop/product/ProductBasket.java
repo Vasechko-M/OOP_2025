@@ -25,17 +25,15 @@ public class ProductBasket {
         return total;
     }
     public void printProducts() {
-        for (int i = 0; i < products.length; i++) {
-            if (products[i] != null) {
-                System.out.println(products[i].toString());
-                } else {
-                    System.out.println("Пустая ячейка");
-                }
-        }
         int count = 0;
         for (Product p : products) {
-            if (p != null && p.isSpecial()){
-            count++;
+            if (p != null) {
+                System.out.println(p);
+                if (p != null && p.isSpecial()){
+                    count++;
+                }
+            } else {
+                System.out.println("Пустая ячейка");
             }
         }
         System.out.println("Итого: " + getTotalPrice());
