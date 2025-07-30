@@ -13,7 +13,7 @@ public class SearchEngine {
             items[size] = item;
             size++;
         } else {
-            System.out.println("Массив полон");
+            System.out.println("Массив для поиска переполнен, создайте новый");
         }
     }
     public Searchable[] search(String query) {

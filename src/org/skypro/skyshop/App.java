@@ -51,14 +51,20 @@ public class App {
         searchEngine.add(new SimpleProduct("Масло", 100));
         searchEngine.add(new SimpleProduct("Хлеб", 10));
         searchEngine.add(new SimpleProduct("Картошка", 50));
+        searchEngine.add(new SimpleProduct("Картошка красная", 53));
         searchEngine.add(new SimpleProduct("Макароны", 70));
         searchEngine.add(new SimpleProduct("Гречка", 90));
 
 
         searchEngine.add(new Article("Война и мир 1", "Школьная литература"));
         searchEngine.add(new Article("Война и мир 2", "Книга для вечернего чтения"));
+        searchEngine.add(new Article("Война и мир 3", "Книга для вечернего чтения"));
+        searchEngine.add(new Article("Война и мир 4", "Книга для вечернего чтения"));
+        searchEngine.add(new Article("Война и мир 5", "Книга для вечернего чтения"));
+        searchEngine.add(new Article("Война и мир 6", "Книга для вечернего чтения"));
         searchEngine.add(new Article("Книга по Java", "Учебник по Java"));
         searchEngine.add(new Article("Кулинария", "Рецепты и советы"));
+
 
 
         System.out.println("Результаты поиска по 'мир':");
@@ -66,7 +72,7 @@ public class App {
         System.out.println();
         System.out.println("Результаты поиска по 'Картошка':");
         System.out.println(Arrays.toString(searchEngine.search("Картошка")));
-
+        System.out.println();
         searchEngine.printSearchResults("мир");
         searchEngine.printSearchResults("Картошка");
     }
