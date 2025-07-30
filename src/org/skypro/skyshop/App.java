@@ -2,6 +2,8 @@ package org.skypro.skyshop;
 
 import org.skypro.skyshop.product.*;
 
+import java.util.Arrays;
+
 public class App {
     public static void main(String[] args) {
         ProductBasket basket = new ProductBasket();
@@ -41,5 +43,31 @@ public class App {
         product = "Масло";
         System.out.println(basket.findProduct(product));
         householdBasket.printProducts();
+
+
+        SearchEngine searchEngine = new SearchEngine(20);
+
+
+        searchEngine.add(new SimpleProduct("Масло", 100));
+        searchEngine.add(new SimpleProduct("Хлеб", 10));
+        searchEngine.add(new SimpleProduct("Картошка", 50));
+        searchEngine.add(new SimpleProduct("Макароны", 70));
+        searchEngine.add(new SimpleProduct("Гречка", 90));
+
+
+        searchEngine.add(new Article("Война и мир 1", "Школьная литература"));
+        searchEngine.add(new Article("Война и мир 2", "Книга для вечернего чтения"));
+        searchEngine.add(new Article("Книга по Java", "Учебник по Java"));
+        searchEngine.add(new Article("Кулинария", "Рецепты и советы"));
+
+
+        System.out.println("Результаты поиска по 'мир':");
+        System.out.println(Arrays.toString(searchEngine.search("мир")));
+        System.out.println();
+        System.out.println("Результаты поиска по 'Картошка':");
+        System.out.println(Arrays.toString(searchEngine.search("Картошка")));
+
+        searchEngine.printSearchResults("мир");
+        searchEngine.printSearchResults("Картошка");
     }
 }
