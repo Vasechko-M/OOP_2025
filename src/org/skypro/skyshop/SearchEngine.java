@@ -40,4 +40,34 @@ public class SearchEngine {
             }
         }
     }
+    public Searchable findBestMatch(String search) throws BestResultNotFound {
+        Searchable bestMatch = null;
+        int maxCount = 0;
+
+        for (int i=0; i < size; i++) {
+            Searchable item = items[i];
+            if (item != null) {
+                String term = item.getSearchTerm();
+                int count = countOccurrences(term, search);
+                if (count > maxCount) {
+                    maxCount = count;
+                    bestMatch = item;
+                    System.out.println("Количество совпадений: " + maxCount);
+                }
+            }
+        }
+        if (bestMatch == null) {
+            throw new BestResultNotFound("Подходящая статья не найдена для запроса: \"" + search + "\"");
+        }
+        return bestMatch;
+    }
+
+    private int countOccurrences(String str, String sub) {
+        int count=0, index=0;
+        while ((index=str.indexOf(sub, index)) != -1) {
+            count++;
+            index += sub.length();
+        }
+        return count;
+    }
 }
