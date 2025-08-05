@@ -1,51 +1,43 @@
 package org.skypro.skyshop;
 
-public class SearchEngine {
-    private Searchable[] items;
-    private int size;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
-    public SearchEngine(int capacity) {
-        this.items = new Searchable[capacity];
-        this.size = 0;
+public class SearchEngine {
+    private List<Searchable> items;
+
+    public SearchEngine() {
+        this.items = new ArrayList<>();
     }
     public void add(Searchable item) {
-        if (size < items.length) {
-            items[size] = item;
-            size++;
-        } else {
-            System.out.println("Массив для поиска переполнен, создайте новый");
-        }
-    }
-    public Searchable[] search(String query) {
-        Searchable[] results = new Searchable[5];
-        int count = 0;
-
-        for (int i = 0; i < size; i++) {
-            Searchable item = items[i];
-            if (item != null && item.getSearchTerm().contains(query)) {
-                results[count] = item;
-                count++;
-                if (count == 5) {
-                    break;
-                }
+        for (Searchable existingItem : items) {
+            if (existingItem.equals(item)) {
+                throw new IllegalStateException("Эта статья уже есть");
             }
         }
+        items.add(item);
+    }
+    public List<Searchable> search(String query) {
+        List<Searchable> results = new ArrayList<>();
+        for (Searchable item : items) {
+            if (item != null && item.getSearchTerm().contains(query)) {
+                results.add(item);
+                }
+            }
         return results;
     }
     public void printSearchResults(String query) {
-        Searchable[] results = search(query);
+        List<Searchable> results = search(query);
         for (Searchable result : results) {
-            if (result != null) {
-                System.out.println(result.getStringRepresentation());
-            }
+            System.out.println(result.getStringRepresentation());
         }
     }
     public Searchable findBestMatch(String search) throws BestResultNotFound {
         Searchable bestMatch = null;
         int maxCount = 0;
 
-        for (int i=0; i < size; i++) {
-            Searchable item = items[i];
+        for (Searchable item : items) {
             if (item != null) {
                 String term = item.getSearchTerm();
                 int count = countOccurrences(term, search);
@@ -69,5 +61,18 @@ public class SearchEngine {
             index += sub.length();
         }
         return count;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SearchEngine)) return false;
+        SearchEngine that = (SearchEngine) o;
+        return Objects.equals(items, that.items);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(items);
     }
 }
