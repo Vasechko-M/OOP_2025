@@ -162,42 +162,45 @@ public class App {
 
 
 
-//        SearchEngine engine = new SearchEngine();
-//        engine.add(new Article("Война и мир.", "Книга для вечернего чтения"));
-//        engine.add(new SimpleProduct("Война и мир. Книга про войну и мир", 100));
-//        engine.add(new Article("Книга по Java", "Учебник по Java"));
-//        engine.add(new Article("Кулинария", "Рецепты и советы"));
-//
-//
-//        try {
-//            Searchable bestItem = engine.findBestMatch("dfghj");
-//            System.out.println("Лучший результат: " + bestItem.getStringRepresentation());
-//        } catch (BestResultNotFound e) {
-//            System.out.println("Исключение: " + e.getMessage());
-//        }
-//
-//        try {
-//            engine.add(new Article("Война и мир.", "Книга для вечернего чтения"));
-//        } catch (IllegalStateException e) {
-//            System.out.println("Обработка исключения при повторном добавлении: " + e.getMessage());
-//        }
+        SearchEngine engine = new SearchEngine();
+        engine.add(new Article("Война и мир.", "Книга для вечернего чтения"));
+        engine.add(new SimpleProduct("Война и мир. Книга про войну и мир", 100));
+        engine.add(new Article("Книга по Java", "Учебник по Java"));
+        engine.add(new Article("Кулинария", "Рецепты и советы"));
 
-//        System.out.println("Результаты поиска по 'мир' (отсортированные Map):");
-//        Map<String, Searchable> sortedResultsMir = searchEngine.searchAndSortByName("мир");
-//        for (Map.Entry<String, Searchable> entry : sortedResultsMir.entrySet()) {
-//            System.out.println(entry.getValue().getStringRepresentation());
-//        }
-//        System.out.println();
-//
-//        System.out.println("Результаты поиска по 'Картошка' (отсортированные Map):");
-//        Map<String, Searchable> sortedResultsKartoshka = searchEngine.searchAndSortByName("Картошка");
-//        for (Map.Entry<String, Searchable> entry : sortedResultsKartoshka.entrySet()) {
-//            System.out.println(entry.getValue().getStringRepresentation());
-//        }
-//        System.out.println();
+
+        try {
+            Searchable bestItem = engine.findBestMatch("dfghj");
+            System.out.println("Лучший результат: " + bestItem.getStringRepresentation());
+        } catch (BestResultNotFound e) {
+            System.out.println("Исключение: " + e.getMessage());
+        }
+
+        try {
+            engine.add(new Article("Война и мир.", "Книга для вечернего чтения"));
+        } catch (IllegalStateException e) {
+            System.out.println("Обработка исключения при повторном добавлении: " + e.getMessage());
+        }
+
+        System.out.println("Результаты поиска по 'мир' (отсортированные Map):");
+        Map<String, List<Searchable>> sortedResultsMir = searchEngine.searchAndSortByName("мир");
+        for (Map.Entry<String, List<Searchable>> entry : sortedResultsMir.entrySet()) {
+            for (Searchable item : entry.getValue()) {
+                System.out.println(item.getStringRepresentation());
+            }
+        }
+        System.out.println();
+
+        System.out.println("Результаты поиска по 'Картошка' (отсортированные Map):");
+        Map<String, List<Searchable>> sortedResultsKartoshka = searchEngine.searchAndSortByName("Картошка");
+        for (Map.Entry<String, List<Searchable>> entry : sortedResultsKartoshka.entrySet()) {
+            for (Searchable item : entry.getValue()) {
+                System.out.println(item.getStringRepresentation());
+            }
+        }
+        System.out.println();
         searchEngine.printSortedSearchResultsMap("мир");
         searchEngine.printSortedSearchResultsMap("Картошка");
-//        Map<String, Searchable> results = searchEngine.searchAndSortByName("мир");
-//        searchEngine.printResultsMap(results);
     }
 }
+
