@@ -1,8 +1,6 @@
 package org.skypro.skyshop;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class SearchEngine {
     private List<Searchable> items;
@@ -27,10 +25,19 @@ public class SearchEngine {
             }
         return results;
     }
+public Map<String, Searchable> searchAndSortByName(String query) {
+    List<Searchable> results = search(query);
+    Map<String, Searchable> sortedMap = new TreeMap<>();
+    for (Searchable item : results) {
+        String name = item.getName();
+        sortedMap.put(name, item);
+    }
+    return sortedMap;
+}
     public void printSearchResults(String query) {
-        List<Searchable> results = search(query);
-        for (Searchable result : results) {
-            System.out.println(result.getStringRepresentation());
+        Map<String, Searchable> resultsMap = searchAndSortByName(query);
+        for (Map.Entry<String, Searchable> entry : resultsMap.entrySet()) {
+            System.out.println(entry.getValue().getStringRepresentation());
         }
     }
     public Searchable findBestMatch(String search) throws BestResultNotFound {
@@ -62,6 +69,28 @@ public class SearchEngine {
         }
         return count;
     }
+    public void printSearchResultsList(String query) {
+        List<Searchable> results = search(query);
+        results.sort(Comparator.comparing(Searchable::getStringRepresentation));
+        System.out.println("Результаты поиска по '" + query + "':");
+        for (Searchable item : results) {
+            System.out.println(item.getStringRepresentation());
+        }
+        System.out.println();
+    }
+    public void printSortedSearchResultsMap(String query) { //отдельный метод не просили, поэтому в мэйне 2 варианта (мне это больше нравится, он более универсален)
+        System.out.println("Результаты поиска по '" + query + "' (отсортированные Map):");
+        Map<String, Searchable> sortedResults = searchAndSortByName(query);
+        for (Map.Entry<String, Searchable> entry : sortedResults.entrySet()) {
+            System.out.println(entry.getValue().getStringRepresentation());
+        }
+        System.out.println();
+    }
+//    public void printResultsMap(Map<String, Searchable> resultsMap) { //для проверки
+//        for (Map.Entry<String, Searchable> entry : resultsMap.entrySet()) {
+//            System.out.println("Имя: " + entry.getKey() + ", Объект: " + entry.getValue().getStringRepresentation());
+//        }
+//    }
 
     @Override
     public boolean equals(Object o) {
