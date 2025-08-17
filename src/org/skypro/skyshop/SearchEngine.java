@@ -65,14 +65,18 @@ public class SearchEngine {
     }
     public TreeSet<Searchable> searchAndSortByNameLengthDesc(String query) {
         TreeSet<Searchable> resultSet = new TreeSet<>(new SearchableComparator());
-
+        String lowerCaseQuery = query.toLowerCase();
         for (Set<Searchable> searchableSet : items.values()) {
             for (Searchable item : searchableSet) {
-                if (item != null && item.getSearchTerm().contains(query)) {
-                    resultSet.add(item);
+                if (item != null) {
+                    String searchTerm = item.getSearchTerm();
+                    if (searchTerm != null && searchTerm.toLowerCase().contains(lowerCaseQuery)) {
+                        resultSet.add(item);
+                    }
                 }
             }
         }
+        System.out.println("Найденные результаты: " + resultSet.size());
         return resultSet;
     }
     public void printSearchResultsSortedByNameLength(String query) {

@@ -12,6 +12,7 @@ public class App {
         searchEngine.add(new SimpleProduct("Масло", 100));
         searchEngine.add(new SimpleProduct("Хлеб", 10));
         searchEngine.add(new SimpleProduct("Картошка", 50));
+        searchEngine.add(new SimpleProduct("Картошка для жарки", 43));
         searchEngine.add(new SimpleProduct("Картошка красная", 53));
         searchEngine.add(new Article("Война и мир 1", "Школьная литература"));
         searchEngine.add(new Article("Война и мир 2", "Книга для вечернего чтения"));
@@ -19,9 +20,9 @@ public class App {
 
 
         System.out.println();
-        searchEngine.printProducts();
+        //searchEngine.printProducts();
         System.out.println();
-        searchEngine.printSearchResultsSortedByNameLength("о");
+        searchEngine.printSearchResultsSortedByNameLength("картошка");
         System.out.println();
         try {
             searchEngine.remove("Пирог");
