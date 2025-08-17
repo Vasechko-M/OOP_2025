@@ -1,62 +1,35 @@
 package org.skypro.skyshop;
 
+import org.skypro.skyshop.product.Product;
+
 import java.util.*;
 
 public class SearchEngine {
-    private Map<String, List<Searchable>> items;
+    private Map<String, Set<Searchable>> items = new LinkedHashMap<>();
 
     public SearchEngine() {
-        this.items = new HashMap<>();
+
     }
     public void add(Searchable item) {
+        if (item == null) {
+            throw new IllegalArgumentException("Элемент не может быть null");
+        }
         String name = item.getName();
-        List<Searchable> list = items.getOrDefault(name, new ArrayList<>());
-        if (list.contains(item)) {
-            throw new IllegalStateException("Этот продукт уже есть");
+        Set<Searchable> set = (Set<Searchable>) items.getOrDefault(name, new LinkedHashSet<>());
+        if (set.contains(item)) {
+            throw new IllegalStateException("Этот элемент уже есть");
         }
-        list.add(item);
-        items.put(name, list);
+        set.add(item);
+        items.putIfAbsent(name, set);
     }
-    public List<Searchable> search(String query) {
-        List<Searchable> results = new ArrayList<>();
-        for (List<Searchable> productList : items.values()) {
-            for (Searchable product : productList) {
-                if (product != null && product.getSearchTerm().contains(query)) {
-                    results.add(product);
-                }
-            }
-        }
-        return results;
-    }
-    public Map<String, List<Searchable>> searchAndSortByName(String query) {
-        Map<String, List<Searchable>> resultMap = new TreeMap<>();
-        for (Map.Entry<String, List<Searchable>> entry : items.entrySet()) {
-            String name = entry.getKey();
-            List<Searchable> filteredList = new ArrayList<>();
-            for (Searchable item : entry.getValue()) {
-                if (item != null && item.getSearchTerm().contains(query)) {
-                    filteredList.add(item);
-                }
-            }
-            if (!filteredList.isEmpty()) {
-                resultMap.put(name, filteredList);
-            }
-        }
-    return resultMap;
-}
-    public void printSearchResults(String query) {
-        Map<String, List<Searchable>> resultsMap = searchAndSortByName(query);
-        for (Map.Entry<String, List<Searchable>> entry : resultsMap.entrySet()) {
-            for (Searchable item : entry.getValue()) {
-                System.out.println(item.getStringRepresentation());
-            }
-        }
+    public Set<Searchable> search(String name) {
+        return items.getOrDefault(name, Collections.emptySet());
     }
     public Searchable findBestMatch(String search) throws BestResultNotFound {
         Searchable bestMatch = null;
         int maxCount = 0;
 
-        for (List<Searchable> itemList : items.values()) {
+        for (Set<Searchable> itemList : items.values()) {
             for (Searchable item : itemList) {
                 if (item != null) {
                     String term = item.getSearchTerm();
@@ -83,35 +56,52 @@ public class SearchEngine {
         }
         return count;
     }
-    public void printSearchResultsList(String query) {
-        List<Searchable> results = search(query);
-        results.sort(Comparator.comparing(Searchable::getStringRepresentation));
-        System.out.println("Результаты поиска по '" + query + "':");
-        for (Searchable item : results) {
-            System.out.println(item.getStringRepresentation());
-        }
-        System.out.println();
-    }
-    public void printSortedSearchResultsMap(String query) {
-        System.out.println("Результаты поиска по '" + query + "' (отсортированные Map):");
-        Map<String, List<Searchable>> sortedResults = searchAndSortByName(query);
-        for (Map.Entry<String, List<Searchable>> entry : sortedResults.entrySet()) {
-            for (Searchable item : entry.getValue()) {
-                System.out.println(item.getStringRepresentation());
+    public void printProducts() {
+        for (Map.Entry<String, Set<Searchable>> entry : items.entrySet()) {
+            for (Searchable product : entry.getValue()) {
+                System.out.println(product.getStringRepresentation());
             }
         }
     }
+    public TreeSet<Searchable> searchAndSortByNameLengthDesc(String query) {
+        TreeSet<Searchable> resultSet = new TreeSet<>(new SearchableComparator());
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof SearchEngine)) return false;
-        SearchEngine that = (SearchEngine) o;
-        return Objects.equals(items, that.items);
+        for (Set<Searchable> searchableSet : items.values()) {
+            for (Searchable item : searchableSet) {
+                if (item != null && item.getSearchTerm().contains(query)) {
+                    resultSet.add(item);
+                }
+            }
+        }
+        return resultSet;
     }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(items);
+    public void printSearchResultsSortedByNameLength(String query) {
+        Set<Searchable> results = searchAndSortByNameLengthDesc(query);
+        for (Searchable item : results) {
+            System.out.println(item.getStringRepresentation());
+        }
+    }
+    public void remove(String name) {
+        if (!items.containsKey(name)) {
+            throw new NoSuchElementException("Продукт '" + name + "' не найден");
+        }
+        items.remove(name);
+    }
+    public boolean contains(String name) {
+        return items.containsKey(name);
     }
 }
+
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (!(o instanceof SearchEngine)) return false;
+//        SearchEngine that = (SearchEngine) o;
+//        return Objects.equals(items, that.items);
+//    }
+//
+//    @Override
+//    public int hashCode() {
+//        return Objects.hash(items);
+//    }
+
