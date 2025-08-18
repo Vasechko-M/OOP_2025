@@ -23,7 +23,29 @@ public class SearchEngine {
         items.putIfAbsent(name, set);
     }
     public Set<Searchable> search(String name) {
-        return items.getOrDefault(name, Collections.emptySet());
+        Set<Searchable> results = new HashSet<>();
+        String lowerCaseName = name.toLowerCase();
+
+        for (Map.Entry<String, Set<Searchable>> entry : items.entrySet()) {
+            String key = entry.getKey().toLowerCase(); //
+            if (key.contains(lowerCaseName)) {
+                results.addAll(entry.getValue());
+            }
+        }
+
+        return results;
+    }
+
+    public void searchPrint(String name) {
+        Set<Searchable> results = search(name);
+        if (results.isEmpty()) {
+            System.out.println("Нет результатов для поиска '" + name + "'.");
+        } else {
+            System.out.println("Найденные результаты для '" + name + "':");
+            for (Searchable item : results) {
+                System.out.println(item.getStringRepresentation());
+            }
+        }
     }
     public Searchable findBestMatch(String search) throws BestResultNotFound {
         Searchable bestMatch = null;

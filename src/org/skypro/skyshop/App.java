@@ -41,6 +41,7 @@ public class App {
         } else {
             System.out.println("В корзине '" + missingName + "' отсутствует.");
         }
+        searchEngine.searchPrint("Картошка");
     }
 }
 
