@@ -3,6 +3,7 @@ package org.skypro.skyshop;
 import org.skypro.skyshop.product.Product;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SearchEngine {
     private Map<String, Set<Searchable>> items = new LinkedHashMap<>();
@@ -105,6 +106,27 @@ public class SearchEngine {
         Set<Searchable> results = searchAndSortByNameLengthDesc(query);
         for (Searchable item : results) {
             System.out.println(item.getStringRepresentation());
+        }
+    }
+    public TreeSet<Searchable> searchAndSortStream(String query) {
+        System.out.printf("\u001B[32mСортировка корзины с помощью Стримов\u001B[0m%n");
+        String lowerCaseQuery = query.toLowerCase();
+
+        return items.values().stream()
+                .flatMap(Set::stream)
+                .filter(item -> item != null &&
+                        item.getSearchTerm() != null &&
+                        item.getSearchTerm().toLowerCase().contains(lowerCaseQuery))
+                .collect(Collectors.toCollection(() -> new TreeSet<>(new SearchableComparator())));
+    }
+    public void printSearchResultsStream(String query) {
+        TreeSet<Searchable> results = searchAndSortStream(query);
+        if (results.isEmpty()) {
+            System.out.println("Продукт " + query + "не найден. Хотите его добавить?");
+        } else {
+            for (Searchable item : results) {
+                System.out.println(item.getStringRepresentation());
+            }
         }
     }
     public void remove(String name) {

@@ -20,28 +20,29 @@ public class App {
 
 
         System.out.println();
-        //searchEngine.printProducts();
+        searchEngine.printSearchResultsStream("о");
         System.out.println();
-        searchEngine.printSearchResultsSortedByNameLength("картошка");
+
+        ProductBasket householdBasket = new ProductBasket();
+        householdBasket.addProduct(new SimpleProduct("Мыло", 25));
+        householdBasket.addProduct(new SimpleProduct("Мыло звездочка", 2));
+        householdBasket.addProduct(new SimpleProduct("Корыто", 247));
+        householdBasket.addProduct(new SimpleProduct("Мыло взрослое", 250));
+        householdBasket.addProduct(new SimpleProduct("Порошок", 85));
+        householdBasket.addProduct(new SimpleProduct("Велосипед", 1285));
+        householdBasket.addProduct(new DiscountedProduct("Порошок зубной",30,18));
+        householdBasket.addProduct(new DiscountedProduct("Порошок для белого",35,18));
+        householdBasket.addProduct(new FixPriceProduct("Мыло для рук"));
+
+        householdBasket.printProducts();
+
         System.out.println();
-        try {
-            searchEngine.remove("Пирог");
-        } catch (NoSuchElementException e) {
-            System.out.println(e.getMessage());
-        }
-        try {
-            searchEngine.remove("Масло");
-        } catch (NoSuchElementException e) {
-            System.out.println(e.getMessage());
-        }
+        householdBasket.averageProductCost("мыло");
         System.out.println();
-        String missingName = "Масло";
-        if (searchEngine.contains(missingName)) {
-            System.out.println("В корзине '" + missingName + "' есть.");
-        } else {
-            System.out.println("В корзине '" + missingName + "' отсутствует.");
-        }
-        searchEngine.searchPrint("Картошка");
+        householdBasket.averageProductCost("порошок");
+        System.out.println();
+        householdBasket.expensiveProducts();
+
     }
 }
 
