@@ -3,6 +3,7 @@ package org.skypro.skyshop;
 import org.skypro.skyshop.product.Product;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SearchEngine {
     private Map<String, Set<Searchable>> items = new LinkedHashMap<>();
@@ -23,7 +24,29 @@ public class SearchEngine {
         items.putIfAbsent(name, set);
     }
     public Set<Searchable> search(String name) {
-        return items.getOrDefault(name, Collections.emptySet());
+        Set<Searchable> results = new HashSet<>();
+        String lowerCaseName = name.toLowerCase();
+
+        for (Map.Entry<String, Set<Searchable>> entry : items.entrySet()) {
+            String key = entry.getKey().toLowerCase(); //
+            if (key.contains(lowerCaseName)) {
+                results.addAll(entry.getValue());
+            }
+        }
+
+        return results;
+    }
+
+    public void searchPrint(String name) {
+        Set<Searchable> results = search(name);
+        if (results.isEmpty()) {
+            System.out.println("Нет результатов для поиска '" + name + "'.");
+        } else {
+            System.out.println("Найденные результаты для '" + name + "':");
+            for (Searchable item : results) {
+                System.out.println(item.getStringRepresentation());
+            }
+        }
     }
     public Searchable findBestMatch(String search) throws BestResultNotFound {
         Searchable bestMatch = null;
@@ -65,20 +88,45 @@ public class SearchEngine {
     }
     public TreeSet<Searchable> searchAndSortByNameLengthDesc(String query) {
         TreeSet<Searchable> resultSet = new TreeSet<>(new SearchableComparator());
-
+        String lowerCaseQuery = query.toLowerCase();
         for (Set<Searchable> searchableSet : items.values()) {
             for (Searchable item : searchableSet) {
-                if (item != null && item.getSearchTerm().contains(query)) {
-                    resultSet.add(item);
+                if (item != null) {
+                    String searchTerm = item.getSearchTerm();
+                    if (searchTerm != null && searchTerm.toLowerCase().contains(lowerCaseQuery)) {
+                        resultSet.add(item);
+                    }
                 }
             }
         }
+        System.out.println("Найденные результаты: " + resultSet.size());
         return resultSet;
     }
     public void printSearchResultsSortedByNameLength(String query) {
         Set<Searchable> results = searchAndSortByNameLengthDesc(query);
         for (Searchable item : results) {
             System.out.println(item.getStringRepresentation());
+        }
+    }
+    public TreeSet<Searchable> searchAndSortStream(String query) {
+        System.out.printf("\u001B[32mСортировка корзины с помощью Стримов\u001B[0m%n");
+        String lowerCaseQuery = query.toLowerCase();
+
+        return items.values().stream()
+                .flatMap(Set::stream)
+                .filter(item -> item != null &&
+                        item.getSearchTerm() != null &&
+                        item.getSearchTerm().toLowerCase().contains(lowerCaseQuery))
+                .collect(Collectors.toCollection(() -> new TreeSet<>(new SearchableComparator())));
+    }
+    public void printSearchResultsStream(String query) {
+        TreeSet<Searchable> results = searchAndSortStream(query);
+        if (results.isEmpty()) {
+            System.out.println("Продукт " + query + "не найден. Хотите его добавить?");
+        } else {
+            for (Searchable item : results) {
+                System.out.println(item.getStringRepresentation());
+            }
         }
     }
     public void remove(String name) {
